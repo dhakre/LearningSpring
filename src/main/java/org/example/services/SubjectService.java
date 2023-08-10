@@ -1,5 +1,8 @@
 package org.example.services;
 
+import org.example.StringEmptyException;
+import org.example.aop.CountMethodCalls;
+import org.example.aop.Logging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,8 +16,12 @@ public class SubjectService {
     public SubjectService( HelloService helloService) {
         this.helloService = helloService;
     }
-
-    public void helloWorld(){
-        System.out.print("\t"+ this.name);
+    @Logging
+    @CountMethodCalls
+    public String helloWorld() throws StringEmptyException {
+        if(name.isEmpty()){
+            throw new StringEmptyException("String is empty");
+        }
+        return helloService.outputHello() + name;
     }
 }
