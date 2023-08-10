@@ -1,12 +1,27 @@
 package org.example;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.example.services.HelloService;
+import org.example.services.SubjectService;
+import org.springframework.context.annotation.*;
 
 @Configuration
 @PropertySource("classpath:application.properties")
-@ComponentScan(basePackages = "org.example")
 public class AppConfiguration {
+
+    @Bean
+    public HelloService helloService(){
+        return new HelloService();
+    }
+
+    @Bean
+    @Profile("dev")
+    public SubjectService subjectService(HelloService helloService){
+        return new SubjectService(helloService,"World");
+    }
+    @Bean
+    @Profile("prod")
+    public SubjectService subjectService2(HelloService helloService){
+        return new SubjectService(helloService,"Saturn");
+    }
 
 }
